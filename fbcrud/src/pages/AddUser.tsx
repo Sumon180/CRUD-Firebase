@@ -15,30 +15,55 @@ const AddUser = () => {
   const { name, email, phone } = state;
 
   const navigate = useNavigate();
+  const { id } = useParams(); // for Updating
 
-  // const { id } = useParams();
+  // For update Get
+  useEffect(() => {
+    axios.get(`http://localhost:3000/read/${id}`).then((resp) => {
+      setState({ ...resp.data });
+    });
+  }, [id]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (!name || !email || !phone) {
       toast.error("Please provide input value");
     } else {
-      //Post Data Create
-      axios
-        .post("http://localhost:3000/create", {
-          name,
-          email,
-          phone,
-        })
-        .then(() => {
-          setState({
-            name: "",
-            email: "",
-            phone: "",
-          });
-        })
-        .catch((err) => toast.error(err.response.data));
-      toast.success("Contact Added Successfully");
+      if (!id) {
+        //Post New Data Create
+        axios
+          .post("http://localhost:3000/create", {
+            name,
+            email,
+            phone,
+          })
+          .then(() => {
+            setState({
+              name: "",
+              email: "",
+              phone: "",
+            });
+          })
+          .catch((err) => toast.error(err.response.data));
+        toast.success("Contact Added Successfully");
+      } else {
+        // Data Update
+        axios
+          .put(`http://localhost:3000/update/${id}`, {
+            name,
+            email,
+            phone,
+          })
+          .then(() => {
+            setState({
+              name: "",
+              email: "",
+              phone: "",
+            });
+          })
+          .catch((err) => toast.error(err.response.data));
+        toast.success("Contact Updated Successfully");
+      }
       setTimeout(() => navigate("/"), 500);
     }
   };
@@ -57,7 +82,7 @@ const AddUser = () => {
           id="name"
           name="name"
           placeholder="Enter your Name"
-          value={name}
+          value={name || ""}
           onChange={handleInputChange}
         />
         <br />
@@ -67,7 +92,7 @@ const AddUser = () => {
           id="email"
           name="email"
           placeholder="Enter your Email"
-          value={email}
+          value={email || ""}
           onChange={handleInputChange}
         />
         <br />
@@ -77,11 +102,11 @@ const AddUser = () => {
           id="phone"
           name="phone"
           placeholder="Enter Your Phone No"
-          value={phone}
+          value={phone || ""}
           onChange={handleInputChange}
         />
         <br />
-        <input type="submit" value="Save" />
+        <input type="submit" value={id ? "Update" : "save"} />
         <Link to="/">
           <input type="button" value="Go Back" />
         </Link>

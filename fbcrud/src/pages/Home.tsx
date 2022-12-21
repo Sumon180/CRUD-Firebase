@@ -19,7 +19,6 @@ const Home = () => {
   }, []);
 
   const deleteContact = (id: any) => {
-    console.log(id);
     if (window.confirm("Are you Sure delete this?")) {
       // Delete Data
       axios.delete(`http://localhost:3000/delete/${id}`);

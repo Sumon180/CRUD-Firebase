@@ -6,18 +6,23 @@ import Home from "./pages/Home";
 import AddUser from "./pages/AddUser";
 import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App">
+    <div className="App">
+      <Header />
+      <BrowserRouter>
         <ToastContainer position="top-center" />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/adduser" element={<AddUser />} />
+          <Route path="/update/:id" element={<AddUser />} />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+      <Footer />
+    </div>
   );
 }
 

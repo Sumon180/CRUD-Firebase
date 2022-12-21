@@ -67,13 +67,16 @@ app.get("/read/:id", async (req, res) => {
   }
 });
 
-app.post("/update", async (req, res) => {
+app.put("/update/:id", async (req, res) => {
   try {
-    const id = req.body.id;
-    const newFirstName = "hello world!";
-    const userRef = await db.collection("users").doc(id).update({
-      firstName: newFirstName,
-    });
+    const id = req.params.id;
+    const { name, email, phone } = req.body;
+    const userJson = {
+      name,
+      email,
+      phone,
+    };
+    const userRef = await db.collection("users").doc(id).update(userJson);
     res.send(userRef);
   } catch (error) {
     res.send(error);
